@@ -1,5 +1,4 @@
 {% set version = '0.1.55' %}
-
 {% set posix = 'm2-' if win else '' %}
 {% set native = 'm2w64-' if win else '' %}
 
@@ -10,47 +9,54 @@ package:
 source:
   fn: Rcsdp_{{ version }}.tar.gz
   url:
-    - https://cran.r-project.org/src/contrib/Rcsdp_{{ version }}.tar.gz
-    - https://cran.r-project.org/src/contrib/Archive/Rcsdp/Rcsdp_{{ version }}.tar.gz
-
+    - {{ cran_mirror }}/src/contrib/Rcsdp_{{ version }}.tar.gz
+    - {{ cran_mirror }}/src/contrib/Archive/Rcsdp/Rcsdp_{{ version }}.tar.gz
   sha256: 5cbde6a8ccc157b4fa9d10bec99351627e783d6ae6989f23b75495bd859353eb
 
 build:
   merge_build_host: True  # [win]
-  number: 1
-  # compilation failed on windows
-  skip: true  # [win]
-
+  number: 2
+  skip: true  # [win32]
   rpaths:
     - lib/R/lib/
     - lib/
 
 requirements:
   build:
-    - posix                # [win]
-    - {{ compiler('c') }}        # [unix]
-    - {{ compiler('m2w64_c') }}  # [win]
+    - {{ compiler('c') }}        # [not win]
+    - {{native}}toolchain        # [win]
+    - {{posix}}filesystem        # [win]
+    - {{posix}}sed               # [win]
+    - {{posix}}grep              # [win]
+    - {{posix}}autoconf
+    - {{posix}}automake          # [not win]
+    - {{posix}}automake-wrapper  # [win]
+    - {{posix}}pkg-config
+    - {{posix}}make
+    - {{posix}}coreutils         # [win]
+    - {{posix}}zip               # [win]
   host:
     - r-base
-
   run:
     - r-base
+    - {{native}}gcc-libs         # [win]
 
 test:
   commands:
-    - $R -e "library('Rcsdp')"  # [not win]
+    - $R -e "library('Rcsdp')"           # [not win]
     - "\"%R%\" -e \"library('Rcsdp')\""  # [win]
 
 about:
-  home: https://cran.r-project.org/web/packages/Rcsdp/index.html
+  home: https://projects.coin-or.org/Csdp/
   license: CPL-1.0
   summary: R interface to the CSDP semidefinite programming library. Installs version 6.1.1 of
     CSDP from the COIN-OR website if required. An existing installation of CSDP may
     be used by passing the proper configure arguments to the installation command. See
     the INSTALL file for further details.
   license_family: OTHER
+
 extra:
-   recipe-maintainers:
+  recipe-maintainers:
     - MathiasHaudgaard
     - FrodePedersen
     - ArneKr
@@ -58,3 +64,5 @@ extra:
     - bgruening
     - daler
     - jdblischak
+    - cbrueffer
+    - dbast
