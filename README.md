@@ -1,11 +1,11 @@
-About r-rcsdp
-=============
+About r-rcsdp-feedstock
+=======================
+
+Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/r-rcsdp-feedstock/blob/main/LICENSE.txt)
 
 Home: https://projects.coin-or.org/Csdp/
 
 Package license: CPL-1.0
-
-Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/r-rcsdp-feedstock/blob/main/LICENSE.txt)
 
 Summary: R interface to the CSDP semidefinite programming library. Installs version 6.1.1 of CSDP from the COIN-OR website if required. An existing installation of CSDP may be used by passing the proper configure arguments to the installation command. See the INSTALL file for further details.
 
